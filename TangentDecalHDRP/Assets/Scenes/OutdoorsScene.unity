@@ -372,7 +372,6 @@ GameObject:
   - component: {fileID: 184378206}
   - component: {fileID: 184378205}
   - component: {fileID: 184378204}
-  - component: {fileID: 184378209}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -493,26 +492,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &184378209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 184378203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0956118d918efcc4398cc047e43b2ba7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  screenPositionIAR: {fileID: -7831953618602235868, guid: 54dfca95c7dd65a449e9296b4c637c67, type: 3}
-  paintIAR: {fileID: 7894521760391395700, guid: 54dfca95c7dd65a449e9296b4c637c67, type: 3}
-  decalList:
-  - name: Crack
-    scale: {x: 0.2, y: 0.2, z: 0.2}
-    albedoTex: {fileID: 2800000, guid: 7f3957e7489aba94face3097f6d05e62, type: 3}
-    normalTex: {fileID: 2800000, guid: 3ab3a454e8fefd54d95591ce0abb2504, type: 3}
-    maskTex: {fileID: 2800000, guid: 3bb00af619bf122428d947ee39a86285, type: 3}
 --- !u!1 &432432459
 GameObject:
   m_ObjectHideFlags: 0
@@ -554,6 +533,58 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 432432459}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1193987000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1193987002}
+  - component: {fileID: 1193987001}
+  m_Layer: 0
+  m_Name: Management
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1193987001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193987000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0956118d918efcc4398cc047e43b2ba7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screenPositionIAR: {fileID: -7831953618602235868, guid: 54dfca95c7dd65a449e9296b4c637c67, type: 3}
+  paintIAR: {fileID: 7894521760391395700, guid: 54dfca95c7dd65a449e9296b4c637c67, type: 3}
+  decalList:
+  - name: Crack
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    albedoTex: {fileID: 2800000, guid: 7f3957e7489aba94face3097f6d05e62, type: 3}
+    normalTex: {fileID: 2800000, guid: 3ab3a454e8fefd54d95591ce0abb2504, type: 3}
+    maskTex: {fileID: 2800000, guid: 3bb00af619bf122428d947ee39a86285, type: 3}
+--- !u!4 &1193987002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1193987000}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -613,7 +644,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 40
+  field of view: 32
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -639,13 +670,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823688464}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.08052145, y: -0.3812272, z: 0.033353075, w: 0.9203639}
-  m_LocalPosition: {x: 3, y: 1, z: -3}
+  m_LocalRotation: {x: 0.056401465, y: -0.38196966, z: 0.023362251, w: 0.9221564}
+  m_LocalPosition: {x: 3, y: 0.5, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 10, y: -45, z: 0}
+  m_LocalEulerAnglesHint: {x: 7, y: -45, z: 0}
 --- !u!114 &1823688468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -665,7 +696,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   volumeAnchorOverride: {fileID: 0}
-  antialiasing: 2
+  antialiasing: 1
   SMAAQuality: 2
   dithering: 1
   stopNaNs: 0
@@ -843,3 +874,4 @@ SceneRoots:
   - {fileID: 432432461}
   - {fileID: 2013410475}
   - {fileID: 184378208}
+  - {fileID: 1193987002}

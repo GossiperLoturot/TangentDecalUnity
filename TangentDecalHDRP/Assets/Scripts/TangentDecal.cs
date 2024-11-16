@@ -179,12 +179,10 @@ class TangentDecalPass : CustomPass
                 {
                     var submeshCount = renderer.sharedMaterials.Length;
 
-                    Debug.Log(submeshCount);
                     for (var i = 0; i < submeshCount; i++)
                     {
                         if (renderer.sharedMaterials[i].GetInstanceID() == query.material.GetInstanceID())
                         {
-                            Debug.Log("Rendering");
                             ctx.cmd.DrawRenderer(renderer, material, i);
                         }
                     }
