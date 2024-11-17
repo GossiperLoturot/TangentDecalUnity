@@ -8,9 +8,9 @@ public class Decal
 {
     public string name;
     public Vector3 scale;
-    public Texture albedoTex;
-    public Texture normalTex;
-    public Texture maskTex;
+    public Texture2D albedoTex;
+    public Texture2D normalTex;
+    public Texture2D maskTex;
 }
 
 public class OutdoorsSceneMgmt : MonoBehaviour
