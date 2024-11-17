@@ -80,11 +80,13 @@ Shader "Hidden/TangentDecal"
             fixed4 baseAlbedo = tex2D(_AlbedoTex, i.uv);
             fixed4 decalAlbedo = tex2D(_DecalAlbedoTex, d.uv) * d.mask;
 
+            // A over B alpha blending
             fixed4 albedo;
-            albedo.r = lerp(baseAlbedo.r, 1.0, decalAlbedo.r * decalAlbedo.a);
-            albedo.g = lerp(baseAlbedo.g, 1.0, decalAlbedo.g * decalAlbedo.a);
-            albedo.b = lerp(baseAlbedo.b, 1.0, decalAlbedo.b * decalAlbedo.a);
             albedo.a = lerp(baseAlbedo.a, 1.0, decalAlbedo.a);
+            if (albedo.a != 0.0)
+            {
+                albedo.rgb = lerp(baseAlbedo.a * baseAlbedo.rgb, decalAlbedo.rgb, decalAlbedo.a) / albedo.a;
+            }
             return albedo;
         }
 
@@ -95,11 +97,13 @@ Shader "Hidden/TangentDecal"
             fixed4 baseNormal = tex2D(_NormalTex, i.uv);
             fixed4 decalNormal = tex2D(_DecalNormalTex, d.uv) * d.mask;
 
+            // A over B alpha blending
             fixed4 normal;
-            normal.r = lerp(baseNormal.r, 1.0, decalNormal.r * decalNormal.a);
-            normal.g = lerp(baseNormal.g, 1.0, decalNormal.g * decalNormal.a);
-            normal.b = lerp(baseNormal.b, 1.0, decalNormal.b * decalNormal.a);
             normal.a = lerp(baseNormal.a, 1.0, decalNormal.a);
+            if (normal.a != 0.0)
+            {
+                normal.rgb = lerp(baseNormal.a * baseNormal.rgb, decalNormal.rgb, decalNormal.a) / normal.a;
+            }
             return normal;
         }
 
@@ -107,14 +111,17 @@ Shader "Hidden/TangentDecal"
         {
             decalOut d = computeDecal(i);
 
+            // (A) smoothness, (R) metalic, (G) ambient occulusion, (B) alpha
             fixed4 baseMask = tex2D(_MaskTex, i.uv);
             fixed4 decalMask = tex2D(_DecalMaskTex, d.uv) * d.mask;
 
+            // A over B alpha blending
             fixed4 mask;
-            mask.r = lerp(baseMask.r, 1.0, decalMask.r * decalMask.b);
-            mask.g = lerp(baseMask.g, 1.0, decalMask.g * decalMask.b);
             mask.b = lerp(baseMask.b, 1.0, decalMask.b);
-            mask.a = lerp(baseMask.a, 1.0, decalMask.a * decalMask.b);
+            if (mask.b != 0.0)
+            {
+                mask.arg = lerp(baseMask.b * baseMask.arg, decalMask.arg, decalMask.b) / mask.b;
+            }
             return mask;
         }
         ENDHLSL
