@@ -78,16 +78,14 @@ Shader "Hidden/TangentDecal"
             decalOut d = computeDecal(i);
 
             fixed4 baseAlbedo = tex2D(_AlbedoTex, i.uv);
-            fixed4 decalAlbedo = tex2D(_DecalAlbedoTex, d.uv);
-            fixed4 decalMask = tex2D(_DecalMaskTex, d.uv);
+            fixed4 decalAlbedo = tex2D(_DecalAlbedoTex, d.uv) * d.mask;
 
-            fixed4 col;
-            col.r = lerp(baseAlbedo.r, decalAlbedo.r, d.mask * decalAlbedo.a);
-            col.g = lerp(baseAlbedo.g, decalAlbedo.g, d.mask * decalAlbedo.a);
-            col.b = lerp(baseAlbedo.b, decalAlbedo.b, d.mask * decalAlbedo.a);
-            col.a = lerp(baseAlbedo.a, decalMask.b, d.mask * decalMask.a);
-
-            return col;
+            fixed4 albedo;
+            albedo.r = lerp(baseAlbedo.r, 1.0, decalAlbedo.r * decalAlbedo.a);
+            albedo.g = lerp(baseAlbedo.g, 1.0, decalAlbedo.g * decalAlbedo.a);
+            albedo.b = lerp(baseAlbedo.b, 1.0, decalAlbedo.b * decalAlbedo.a);
+            albedo.a = lerp(baseAlbedo.a, 1.0, decalAlbedo.a);
+            return albedo;
         }
 
         fixed4 fragNormal(v2f i) : SV_Target
@@ -95,21 +93,13 @@ Shader "Hidden/TangentDecal"
             decalOut d = computeDecal(i);
 
             fixed4 baseNormal = tex2D(_NormalTex, i.uv);
-            fixed4 decalNormal = tex2D(_DecalNormalTex, d.uv);
+            fixed4 decalNormal = tex2D(_DecalNormalTex, d.uv) * d.mask;
 
             fixed4 normal;
-            #if defined(UNITY_NO_DXT5nm)
-                normal.r = lerp(baseNormal.r, decalNormal.r, d.mask * decalNormal.a);
-                normal.g = lerp(baseNormal.g, decalNormal.g, d.mask * decalNormal.a);
-                normal.b = lerp(baseNormal.b, decalNormal.b, d.mask * decalNormal.a);
-                normal.a = baseNormal.a;
-            #else // DXT5nm or BC5
-                normal.a = lerp(baseNormal.a, decalNormal.r, d.mask * decalNormal.a);
-                normal.g = lerp(baseNormal.g, decalNormal.g, d.mask * decalNormal.a);
-                normal.b = lerp(baseNormal.b, decalNormal.b, d.mask * decalNormal.a);
-                normal.r = baseNormal.r;
-            #endif
-
+            normal.r = lerp(baseNormal.r, 1.0, decalNormal.r * decalNormal.a);
+            normal.g = lerp(baseNormal.g, 1.0, decalNormal.g * decalNormal.a);
+            normal.b = lerp(baseNormal.b, 1.0, decalNormal.b * decalNormal.a);
+            normal.a = lerp(baseNormal.a, 1.0, decalNormal.a);
             return normal;
         }
 
@@ -118,14 +108,13 @@ Shader "Hidden/TangentDecal"
             decalOut d = computeDecal(i);
 
             fixed4 baseMask = tex2D(_MaskTex, i.uv);
-            fixed4 decalMask = tex2D(_DecalMaskTex, d.uv);
+            fixed4 decalMask = tex2D(_DecalMaskTex, d.uv) * d.mask;
 
             fixed4 mask;
-            mask.a = lerp(baseMask.a, decalMask.r, d.mask * decalMask.a);
-            mask.r = lerp(baseMask.r, decalMask.g, d.mask * decalMask.a);
-            mask.g = baseMask.g;
-            mask.b = baseMask.b;
-
+            mask.r = lerp(baseMask.r, 1.0, decalMask.r * decalMask.b);
+            mask.g = lerp(baseMask.g, 1.0, decalMask.g * decalMask.b);
+            mask.b = lerp(baseMask.b, 1.0, decalMask.b);
+            mask.a = lerp(baseMask.a, 1.0, decalMask.a * decalMask.b);
             return mask;
         }
         ENDHLSL

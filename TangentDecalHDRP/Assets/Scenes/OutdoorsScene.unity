@@ -391,11 +391,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b843c31bfe2b1d4ebd1105d027b586e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  width: 1024
+  height: 1024
   itemDescriptors:
-  - material: {fileID: 2100000, guid: 8043642de0c9f15478987a9ecdc3466a, type: 2}
-    albedoTexName: _BaseColorMap
-    normalTexName: _NormalMap
-    maskTexName: _MaskMap
+  - width: 1024
+    height: 1024
+    material: {fileID: 2100000, guid: 8043642de0c9f15478987a9ecdc3466a, type: 2}
+    albedoTexName: _DecalAlbedoMap
+    normalTexName: _DecalNormalMap
+    maskTexName: _DecalMaskMap
     renderers:
     - {fileID: 184378206}
 --- !u!64 &184378205
