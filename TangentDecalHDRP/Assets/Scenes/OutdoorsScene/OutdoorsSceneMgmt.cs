@@ -11,6 +11,7 @@ public class Decal
     public Texture2D albedoTex;
     public Texture2D normalTex;
     public Texture2D maskTex;
+    public Texture2D alphaTex;
 }
 
 public class OutdoorsSceneMgmt : MonoBehaviour
@@ -44,6 +45,7 @@ public class OutdoorsSceneMgmt : MonoBehaviour
                         decal.albedoTex,
                         decal.normalTex,
                         decal.maskTex,
+                        decal.alphaTex,
                         rayHit.point,
                         rayHit.normal,
                         UnityEngine.Random.insideUnitSphere,

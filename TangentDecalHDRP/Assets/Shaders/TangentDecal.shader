@@ -10,9 +10,11 @@ Shader "Hidden/TangentDecal"
         sampler2D _AlbedoTex;
         sampler2D _NormalTex;
         sampler2D _MaskTex;
+        sampler2D _AlphaTex;
         sampler2D _DecalAlbedoTex;
         sampler2D _DecalNormalTex;
         sampler2D _DecalMaskTex;
+        sampler2D _DecalAlphaTex;
         half3 _DecalPosition;
         half3 _DecalNormal;
         half3 _DecalTangent;
@@ -124,6 +126,23 @@ Shader "Hidden/TangentDecal"
             }
             return mask;
         }
+
+        fixed4 fragAlpha(v2f i) : SV_Target
+        {
+            decalOut d = computeDecal(i);
+
+            fixed4 baseAlpha = tex2D(_AlphaTex, i.uv);
+            fixed4 decalAlpha = tex2D(_DecalAlphaTex, d.uv) * d.mask;
+
+            // A over B alpha blending
+            fixed4 alpha;
+            alpha.a = lerp(baseAlpha.a, 1.0, decalAlpha.a);
+            if (alpha.a != 0.0)
+            {
+                alpha.rgb = lerp(baseAlpha.a * baseAlpha.rgb, decalAlpha.rgb, decalAlpha.a) / alpha.a;
+            }
+            return alpha;
+        }
         ENDHLSL
 
         Pass
@@ -150,6 +169,15 @@ Shader "Hidden/TangentDecal"
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment fragMask
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "DecalAlphaPass"
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment fragAlpha
             ENDHLSL
         }
     }
