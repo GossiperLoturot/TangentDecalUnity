@@ -7,14 +7,8 @@ Shader "Hidden/TangentDecal"
         HLSLINCLUDE
         #include "UnityCG.cginc"
 
-        sampler2D _AlbedoTex;
-        sampler2D _NormalTex;
-        sampler2D _MaskTex;
-        sampler2D _AlphaTex;
-        sampler2D _DecalAlbedoTex;
-        sampler2D _DecalNormalTex;
-        sampler2D _DecalMaskTex;
-        sampler2D _DecalAlphaTex;
+        sampler2D _MainTex;
+        sampler2D _DecalTex;
         half3 _DecalPosition;
         half3 _DecalNormal;
         half3 _DecalTangent;
@@ -77,71 +71,71 @@ Shader "Hidden/TangentDecal"
 
         fixed4 fragAlbedo(v2f i) : SV_Target
         {
-            decalOut d = computeDecal(i);
+            decalOut m = computeDecal(i);
 
-            fixed4 baseAlbedo = tex2D(_AlbedoTex, i.uv);
-            fixed4 decalAlbedo = tex2D(_DecalAlbedoTex, d.uv) * d.mask;
+            fixed4 base = tex2D(_MainTex, i.uv);
+            fixed4 decal = tex2D(_DecalTex, m.uv) * m.mask;
 
             // A over B alpha blending
-            fixed4 albedo;
-            albedo.a = lerp(baseAlbedo.a, 1.0, decalAlbedo.a);
-            if (albedo.a != 0.0)
+            fixed4 o;
+            o.a = lerp(base.a, 1.0, decal.a);
+            if (o.a != 0.0)
             {
-                albedo.rgb = lerp(baseAlbedo.a * baseAlbedo.rgb, decalAlbedo.rgb, decalAlbedo.a) / albedo.a;
+                o.rgb = lerp(base.a * base.rgb, decal.rgb, decal.a) / o.a;
             }
-            return albedo;
+            return o;
         }
 
         fixed4 fragNormal(v2f i) : SV_Target
         {
-            decalOut d = computeDecal(i);
+            decalOut m = computeDecal(i);
 
-            fixed4 baseNormal = tex2D(_NormalTex, i.uv);
-            fixed4 decalNormal = tex2D(_DecalNormalTex, d.uv) * d.mask;
+            fixed4 base = tex2D(_MainTex, i.uv);
+            fixed4 decal = tex2D(_DecalTex, m.uv) * m.mask;
 
             // A over B alpha blending
-            fixed4 normal;
-            normal.a = lerp(baseNormal.a, 1.0, decalNormal.a);
-            if (normal.a != 0.0)
+            fixed4 o;
+            o.a = lerp(base.a, 1.0, decal.a);
+            if (o.a != 0.0)
             {
-                normal.rgb = lerp(baseNormal.a * baseNormal.rgb, decalNormal.rgb, decalNormal.a) / normal.a;
+                o.rgb = lerp(base.a * base.rgb, decal.rgb, decal.a) / o.a;
             }
-            return normal;
+            return o;
         }
 
         fixed4 fragMask(v2f i) : SV_Target
         {
-            decalOut d = computeDecal(i);
+            decalOut m = computeDecal(i);
 
             // (A) smoothness, (R) metalic, (G) ambient occulusion, (B) alpha
-            fixed4 baseMask = tex2D(_MaskTex, i.uv);
-            fixed4 decalMask = tex2D(_DecalMaskTex, d.uv) * d.mask;
+            fixed4 base = tex2D(_MainTex, i.uv);
+            fixed4 decal = tex2D(_DecalTex, m.uv) * m.mask;
 
             // A over B alpha blending
-            fixed4 mask;
-            mask.b = lerp(baseMask.b, 1.0, decalMask.b);
-            if (mask.b != 0.0)
+            fixed4 o;
+            o.b = lerp(base.b, 1.0, decal.b);
+            if (o.b != 0.0)
             {
-                mask.arg = lerp(baseMask.b * baseMask.arg, decalMask.arg, decalMask.b) / mask.b;
+                o.rga = lerp(base.b * base.rga, decal.rga, decal.b) / o.b;
             }
-            return mask;
+            return o;
         }
 
         fixed4 fragAlpha(v2f i) : SV_Target
         {
-            decalOut d = computeDecal(i);
+            decalOut m = computeDecal(i);
 
-            fixed4 baseAlpha = tex2D(_AlphaTex, i.uv);
-            fixed4 decalAlpha = tex2D(_DecalAlphaTex, d.uv) * d.mask;
+            fixed4 base = tex2D(_MainTex, i.uv);
+            fixed4 decal = tex2D(_DecalTex, m.uv) * m.mask;
 
             // A over B alpha blending
-            fixed4 alpha;
-            alpha.a = lerp(baseAlpha.a, 1.0, decalAlpha.a);
-            if (alpha.a != 0.0)
+            fixed4 o;
+            o.a = lerp(base.a, 1.0, decal.a);
+            if (o.a != 0.0)
             {
-                alpha.rgb = lerp(baseAlpha.a * baseAlpha.rgb, decalAlpha.rgb, decalAlpha.a) / alpha.a;
+                o.rgb = lerp(base.a * base.rgb, decal.rgb, decal.a) / o.a;
             }
-            return alpha;
+            return o;
         }
         ENDHLSL
 

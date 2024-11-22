@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 204686794}
   - component: {fileID: 204686793}
   - component: {fileID: 204686792}
+  - component: {fileID: 204686796}
   m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
@@ -228,6 +229,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &204686796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204686791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37527fa1eb698a5418934e3906f3d1e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemDescriptors:
+  - width: 1024
+    height: 1024
+    material: {fileID: 2100000, guid: a1b548a65660d704d8376dfd1cb54df8, type: 2}
+    albedoTexName: _DecalAlbedoMap
+    normalTexName: _DecalNormalMap
+    maskTexName: _DecalMaskMap
+    alphaTexName: _DecalAlphaMap
+    renderers:
+    - {fileID: 204686793}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,7 +261,6 @@ GameObject:
   m_Component:
   - component: {fileID: 330585546}
   - component: {fileID: 330585545}
-  - component: {fileID: 330585544}
   - component: {fileID: 330585547}
   m_Layer: 0
   m_Name: Main Camera
@@ -247,14 +269,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &330585544
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330585543}
-  m_Enabled: 1
 --- !u!20 &330585545
 Camera:
   m_ObjectHideFlags: 0
@@ -495,6 +509,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1481909240}
+  - component: {fileID: 1481909241}
   m_Layer: 0
   m_Name: Management
   m_TagString: Untagged
@@ -517,6 +532,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1481909241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481909239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35061ec929caebd41920b31ce7cc9c42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  screenPositionIAR: {fileID: -7831953618602235868, guid: ed6550407bbf004428f1be92677f1445, type: 3}
+  paintIAR: {fileID: 7894521760391395700, guid: ed6550407bbf004428f1be92677f1445, type: 3}
+  decalList:
+  - name: Crack
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    albedoTex: {fileID: 2800000, guid: e703387e7f616dc438f4525c38d7be4b, type: 3}
+    normalTex: {fileID: 2800000, guid: 8082faff9478a1048be66c0d33aa8d0f, type: 3}
+    maskTex: {fileID: 2800000, guid: f67d0ac40b83bea4db9522a69f8f456e, type: 3}
+    alphaTex: {fileID: 2800000, guid: f281a78e27c0c2141bdbccf657cb7209, type: 3}
+  - name: Splash
+    scale: {x: 0.4, y: 0.4, z: 0.4}
+    albedoTex: {fileID: 2800000, guid: defc9c2c9ef07064f87916243d4d2b09, type: 3}
+    normalTex: {fileID: 2800000, guid: d1d744c4a9f2ac543b7e7557a7fe134a, type: 3}
+    maskTex: {fileID: 2800000, guid: 79e2bec03ac560742873afc1cbad2777, type: 3}
+    alphaTex: {fileID: 2800000, guid: 7a07f9f7768fac54cb3bc1bcb39f4dff, type: 3}
 --- !u!1 &2056547195
 GameObject:
   m_ObjectHideFlags: 0
