@@ -7,32 +7,32 @@ using UnityEngine.Rendering.HighDefinition;
 [Serializable]
 public class ItemDescriptor
 {
-    public int width = 1024;
-    public int height = 1024;
+    public int width;
+    public int height;
     public Material material;
-    public string albedoTexName = "_DecalAlbedoMap";
-    public string normalTexName = "_DecalNormalMap";
-    public string maskTexName = "_DecalMaskMap";
-    public string alphaTexName = "_DecalAlphaMap";
+    public string albedoTexName;
+    public string normalTexName;
+    public string maskTexName;
+    public string alphaTexName;
     public List<Renderer> renderers;
 }
 
 public class Item
 {
-    public RTHandle albedoBuffer;
-    public RTHandle normalBuffer;
-    public RTHandle maskBuffer;
-    public RTHandle alphaBuffer;
+    public RTHandle albedoRT;
+    public RTHandle normalRT;
+    public RTHandle maskRT;
+    public RTHandle alphaRT;
     public Material material;
     public List<Renderer> renderers;
 }
 
 class PaintQuery
 {
-    public RTHandle albedoBuffer;
-    public RTHandle normalBuffer;
-    public RTHandle maskBuffer;
-    public RTHandle alphaBuffer;
+    public RTHandle albedoRT;
+    public RTHandle normalRT;
+    public RTHandle maskRT;
+    public RTHandle alphaRT;
     public Material material;
     public List<Renderer> renderers;
     public Texture2D albedoTex;
@@ -47,14 +47,13 @@ class PaintQuery
 
 class Drawcall
 {
-    public RTHandle buffer;
-    public int pass;
+    public RTHandle mainRT;
+    public Texture decalTex;
+    public int shaderPass;
 }
 
 public class TangentDecal : MonoBehaviour
 {
-    public int width = 1024;
-    public int height = 1024;
     public List<ItemDescriptor> itemDescriptors = new List<ItemDescriptor>();
 
     CustomPassVolume volume;
@@ -66,12 +65,12 @@ public class TangentDecal : MonoBehaviour
         volume.hideFlags = HideFlags.HideInInspector | HideFlags.DontSave;
 
         pass = volume.AddPassOfType<TangentDecalPass>();
-        pass.Init(width, height, itemDescriptors);
+        pass.Init(itemDescriptors);
     }
 
     void OnDisable()
     {
-        if (volume != null) Destroy(volume);
+        Destroy(volume);
     }
 
     public void Paint(Texture2D albedoTex, Texture2D normalTex, Texture2D maskTex, Texture2D alphaTex, Vector3 position, Vector3 normal, Vector3 tangent, Vector3 scale)
@@ -82,45 +81,36 @@ public class TangentDecal : MonoBehaviour
 
 class TangentDecalPass : CustomPass
 {
+    Shader shader;
     List<Item> items = new List<Item>();
     List<PaintQuery> queue = new List<PaintQuery>();
-    Shader shader;
-    RTHandle albedoBuffer;
-    RTHandle normalBuffer;
-    RTHandle maskBuffer;
-    RTHandle alphaBuffer;
 
-    public void Init(int width, int height, List<ItemDescriptor> itemDescriptors)
+    public void Init(List<ItemDescriptor> itemDescriptors)
     {
         Cleanup();
 
-        albedoBuffer = RTHandles.Alloc(width, height);
-        normalBuffer = RTHandles.Alloc(width, height);
-        maskBuffer = RTHandles.Alloc(width, height);
-        alphaBuffer = RTHandles.Alloc(width, height);
-
         foreach (var itemDescriptor in itemDescriptors)
         {
-            var albedoBuffer = RTHandles.Alloc(itemDescriptor.width, itemDescriptor.height);
-            itemDescriptor.material.SetTexture(itemDescriptor.albedoTexName, albedoBuffer);
+            var albedoRT = RTHandles.Alloc(itemDescriptor.width, itemDescriptor.height);
+            itemDescriptor.material.SetTexture(itemDescriptor.albedoTexName, albedoRT);
 
-            var normalBuffer = RTHandles.Alloc(itemDescriptor.width, itemDescriptor.height);
-            itemDescriptor.material.SetTexture(itemDescriptor.normalTexName, normalBuffer);
+            var normalRT = RTHandles.Alloc(itemDescriptor.width, itemDescriptor.height);
+            itemDescriptor.material.SetTexture(itemDescriptor.normalTexName, normalRT);
 
-            var maskBuffer = RTHandles.Alloc(itemDescriptor.width, itemDescriptor.height);
-            itemDescriptor.material.SetTexture(itemDescriptor.maskTexName, maskBuffer);
+            var maskRT = RTHandles.Alloc(itemDescriptor.width, itemDescriptor.height);
+            itemDescriptor.material.SetTexture(itemDescriptor.maskTexName, maskRT);
 
-            var alphaBuffer = RTHandles.Alloc(itemDescriptor.width, itemDescriptor.height);
-            itemDescriptor.material.SetTexture(itemDescriptor.alphaTexName, alphaBuffer);
+            var alphaRT = RTHandles.Alloc(itemDescriptor.width, itemDescriptor.height);
+            itemDescriptor.material.SetTexture(itemDescriptor.alphaTexName, alphaRT);
 
             var item = new Item()
             {
+                albedoRT = albedoRT,
+                normalRT = normalRT,
+                maskRT = maskRT,
+                alphaRT = alphaRT,
                 material = itemDescriptor.material,
-                renderers = itemDescriptor.renderers,
-                albedoBuffer = albedoBuffer,
-                normalBuffer = normalBuffer,
-                maskBuffer = maskBuffer,
-                alphaBuffer = alphaBuffer
+                renderers = itemDescriptor.renderers
             };
             items.Add(item);
         }
@@ -132,10 +122,10 @@ class TangentDecalPass : CustomPass
         {
             var query = new PaintQuery()
             {
-                albedoBuffer = item.albedoBuffer,
-                normalBuffer = item.normalBuffer,
-                maskBuffer = item.maskBuffer,
-                alphaBuffer = item.alphaBuffer,
+                albedoRT = item.albedoRT,
+                normalRT = item.normalRT,
+                maskRT = item.maskRT,
+                alphaRT = item.alphaRT,
                 renderers = item.renderers,
                 material = item.material,
                 albedoTex = albedoTex,
@@ -160,36 +150,30 @@ class TangentDecalPass : CustomPass
     {
         foreach (var query in queue)
         {
-            // Create new material for buffering render resource
-            var material = CoreUtils.CreateEngineMaterial(shader);
-            material.SetTexture("_AlbedoTex", albedoBuffer);
-            material.SetTexture("_NormalTex", normalBuffer);
-            material.SetTexture("_MaskTex", maskBuffer);
-            material.SetTexture("_AlphaTex", alphaBuffer);
-            material.SetTexture("_DecalAlbedoTex", query.albedoTex);
-            material.SetTexture("_DecalNormalTex", query.normalTex);
-            material.SetTexture("_DecalMaskTex", query.maskTex);
-            material.SetTexture("_DecalAlphaTex", query.alphaTex);
-            material.SetVector("_DecalPosition", query.position);
-            material.SetVector("_DecalNormal", query.normal);
-            material.SetVector("_DecalTangent", query.tangent);
-            material.SetVector("_DecalScale", query.scale);
-
             // Register Albedo and Normal, Mask drawcall if available
-            var drawcalls = new List<Drawcall>();
-            ctx.cmd.Blit(query.albedoBuffer, albedoBuffer);
-            drawcalls.Add(new Drawcall() { buffer = query.albedoBuffer, pass = 0 });
-            ctx.cmd.Blit(query.normalBuffer, normalBuffer);
-            drawcalls.Add(new Drawcall() { buffer = query.normalBuffer, pass = 1 });
-            ctx.cmd.Blit(query.maskBuffer, maskBuffer);
-            drawcalls.Add(new Drawcall() { buffer = query.maskBuffer, pass = 2 });
-            ctx.cmd.Blit(query.alphaBuffer, alphaBuffer);
-            drawcalls.Add(new Drawcall() { buffer = query.alphaBuffer, pass = 3 });
+            var drawcalls = new Drawcall[]
+            {
+                new Drawcall() { mainRT = query.albedoRT, decalTex = query.albedoTex, shaderPass = 0 },
+                new Drawcall() { mainRT = query.normalRT, decalTex = query.normalTex, shaderPass = 1 },
+                new Drawcall() { mainRT = query.maskRT, decalTex = query.maskTex, shaderPass = 2 },
+                new Drawcall() { mainRT = query.alphaRT, decalTex = query.alphaTex, shaderPass = 3 }
+            };
 
             // Draw decal on texture
             foreach (var drawcall in drawcalls)
             {
-                CoreUtils.SetRenderTarget(ctx.cmd, drawcall.buffer, ClearFlag.Color);
+                var bufferRT = RTHandles.Alloc(drawcall.mainRT.rt.width, drawcall.mainRT.rt.height);
+
+                // Create new material for buffering render resource
+                var material = CoreUtils.CreateEngineMaterial(shader);
+                material.SetTexture("_MainTex", drawcall.mainRT);
+                material.SetTexture("_DecalTex", drawcall.decalTex);
+                material.SetVector("_DecalPosition", query.position);
+                material.SetVector("_DecalNormal", query.normal);
+                material.SetVector("_DecalTangent", query.tangent);
+                material.SetVector("_DecalScale", query.scale);
+
+                CoreUtils.SetRenderTarget(ctx.cmd, bufferRT, ClearFlag.Color);
 
                 foreach (var renderer in query.renderers)
                 {
@@ -197,33 +181,29 @@ class TangentDecalPass : CustomPass
                     {
                         if (renderer.sharedMaterials[i].GetInstanceID() == query.material.GetInstanceID())
                         {
-                            ctx.cmd.DrawRenderer(renderer, material, i, drawcall.pass);
+                            ctx.cmd.DrawRenderer(renderer, material, i, drawcall.shaderPass);
                         }
                     }
                 }
+
+                ctx.cmd.Blit(bufferRT, drawcall.mainRT);
+
+                RTHandles.Release(bufferRT);
+                CoreUtils.Destroy(material);
             }
 
-            CoreUtils.Destroy(material);
         }
         queue.Clear();
     }
 
     protected override void Cleanup()
     {
-        RTHandles.Release(albedoBuffer);
-        RTHandles.Release(normalBuffer);
-        RTHandles.Release(maskBuffer);
-        RTHandles.Release(alphaBuffer);
-
         foreach (var item in items)
         {
-            if (item.albedoBuffer != null) RTHandles.Release(item.albedoBuffer);
-            if (item.normalBuffer != null) RTHandles.Release(item.normalBuffer);
-            if (item.maskBuffer != null) RTHandles.Release(item.maskBuffer);
-            if (item.alphaBuffer != null) RTHandles.Release(item.alphaBuffer);
+            RTHandles.Release(item.albedoRT);
+            RTHandles.Release(item.normalRT);
+            RTHandles.Release(item.maskRT);
+            RTHandles.Release(item.alphaRT);
         }
-
-        queue.Clear();
-        items.Clear();
     }
 }
