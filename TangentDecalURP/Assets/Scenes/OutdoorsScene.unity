@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: aa712f5f38208c34a97c084360955a5e, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -328,13 +328,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.08052145, y: -0.3812272, z: 0.033353075, w: 0.9203639}
-  m_LocalPosition: {x: 3, y: 0.5, z: -3}
+  m_LocalRotation: {x: 0, y: 0.3420201, z: 0, w: 0.9396927}
+  m_LocalPosition: {x: -1, y: 0, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 10, y: -45, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 40, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -470,13 +470,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.16317591, y: -0.33682406, z: 0.05939116, w: 0.92541665}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 20, y: -40, z: 0}
 --- !u!114 &410087042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -500,6 +500,55 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!1 &972062643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 972062645}
+  - component: {fileID: 972062644}
+  m_Layer: 0
+  m_Name: Global Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &972062644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972062643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 1e067e96ae3caec4da21d269c0edb504, type: 2}
+--- !u!4 &972062645
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972062643}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.488239, y: -8.704173, z: 9.83223}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1481909239
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,7 +597,7 @@ MonoBehaviour:
   paintIAR: {fileID: 7894521760391395700, guid: ed6550407bbf004428f1be92677f1445, type: 3}
   decalList:
   - name: Crack
-    scale: {x: 0.2, y: 0.2, z: 0.2}
+    scale: {x: 0.4, y: 0.4, z: 0.4}
     albedoTex: {fileID: 2800000, guid: e703387e7f616dc438f4525c38d7be4b, type: 3}
     normalTex: {fileID: 2800000, guid: 8082faff9478a1048be66c0d33aa8d0f, type: 3}
     maskTex: {fileID: 2800000, guid: f67d0ac40b83bea4db9522a69f8f456e, type: 3}
@@ -559,6 +608,12 @@ MonoBehaviour:
     normalTex: {fileID: 2800000, guid: d1d744c4a9f2ac543b7e7557a7fe134a, type: 3}
     maskTex: {fileID: 2800000, guid: 79e2bec03ac560742873afc1cbad2777, type: 3}
     alphaTex: {fileID: 2800000, guid: 7a07f9f7768fac54cb3bc1bcb39f4dff, type: 3}
+  - name: Weathering
+    scale: {x: 0.4, y: 0.4, z: 0.4}
+    albedoTex: {fileID: 2800000, guid: 78c28a27c0f32944ca7d14b7afc07841, type: 3}
+    normalTex: {fileID: 2800000, guid: 67ec506b05a827043bb4ea604c60aa74, type: 3}
+    maskTex: {fileID: 2800000, guid: 57fda90a59a4a25448442983e6dffeb4, type: 3}
+    alphaTex: {fileID: 2800000, guid: 298f6fa01ce98e840b763e1449f1c850, type: 3}
 --- !u!1 &2056547195
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,6 +729,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 330585546}
   - {fileID: 410087041}
+  - {fileID: 972062645}
   - {fileID: 204686795}
   - {fileID: 2056547199}
   - {fileID: 1481909240}
