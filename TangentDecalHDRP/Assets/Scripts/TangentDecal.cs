@@ -54,6 +54,7 @@ class Drawcall
 
 public class TangentDecal : MonoBehaviour
 {
+    public Shader shader;
     public List<ItemDescriptor> itemDescriptors = new List<ItemDescriptor>();
 
     CustomPassVolume volume;
@@ -65,7 +66,7 @@ public class TangentDecal : MonoBehaviour
         volume.hideFlags = HideFlags.HideInInspector | HideFlags.DontSave;
 
         pass = volume.AddPassOfType<TangentDecalPass>();
-        pass.Init(itemDescriptors);
+        pass.Init(shader, itemDescriptors);
     }
 
     void OnDisable()
@@ -85,9 +86,11 @@ class TangentDecalPass : CustomPass
     List<Item> items = new List<Item>();
     List<PaintQuery> queue = new List<PaintQuery>();
 
-    public void Init(List<ItemDescriptor> itemDescriptors)
+    public void Init(Shader shader, List<ItemDescriptor> itemDescriptors)
     {
         Cleanup();
+
+        this.shader = shader;
 
         foreach (var itemDescriptor in itemDescriptors)
         {
@@ -139,11 +142,6 @@ class TangentDecalPass : CustomPass
             };
             queue.Add(query);
         }
-    }
-
-    protected override void Setup(ScriptableRenderContext renderContext, CommandBuffer cmd)
-    {
-        shader = Shader.Find("Hidden/TangentDecal");
     }
 
     protected override void Execute(CustomPassContext ctx)

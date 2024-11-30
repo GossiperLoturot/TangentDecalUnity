@@ -64,13 +64,14 @@ class Drawcall
 
 public class TangentDecal : MonoBehaviour
 {
+    public Shader shader;
     public List<ItemDescriptor> itemDescriptors = new List<ItemDescriptor>();
 
     TangentDecalPass pass;
 
     void OnEnable()
     {
-        pass = new TangentDecalPass(itemDescriptors);
+        pass = new TangentDecalPass(shader, itemDescriptors);
         RenderPipelineManager.beginCameraRendering += OnBeginCamera;
     }
 
@@ -98,9 +99,9 @@ class TangentDecalPass : ScriptableRenderPass
     List<PaintQuery> queue = new List<PaintQuery>();
     List<Material> overrideMaterials = new List<Material>();
 
-    public TangentDecalPass(List<ItemDescriptor> itemDescriptors)
+    public TangentDecalPass(Shader shader, List<ItemDescriptor> itemDescriptors)
     {
-        shader = Shader.Find("Hidden/TangentDecal");
+        this.shader = shader;
 
         foreach (var itemDescriptor in itemDescriptors)
         {
